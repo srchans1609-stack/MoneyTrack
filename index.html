@@ -3,17 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MoneyTrack - Nivel 4</title>
+  <title>MoneyTrack</title>
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
   <div class="container">
-    <h1>MoneyTrack </h1>
+    <h1>MoneyTrack</h1>
 
-    <!-- Resumen básico -->
+    <!-- Resumen con indicadores y estadísticas -->
     <div class="resumen">
       <p><strong>Titular:</strong> <span id="titular-display"></span></p>
       <p><strong>Saldo Actual:</strong> <span id="saldo-actual-display"></span></p>
+      <p><strong>Total Gastado:</strong> <span id="gastos-reduce-display" class="gasto"></span></p>
+      <p><strong>Categoría con más gasto:</strong> <span id="top-categoria-display">-</span></p>
     </div>
 
     <!-- Filtro por categoría -->
@@ -32,7 +34,6 @@
         </select>
       </div>
 
-      <!-- Tabla vacía que rellenaremos con JavaScript -->
       <table>
         <thead>
           <tr>
@@ -44,7 +45,7 @@
           </tr>
         </thead>
         <tbody id="tabla-movimientos">
-          <!-- Las filas se insertarán desde app.js -->
+          <!-- Las filas se insertan desde app.js -->
         </tbody>
       </table>
     </section>

@@ -162,3 +162,59 @@ document.addEventListener("DOMContentLoaded", () => {
   // Pintamos la tabla completa al cargar
   pintarTabla(movimientos);
 });
+
+ // Calcula el total gastado utilizando el método .reduce().
+
+function totalGastosReduce() {
+  return movimientos
+    .filter(mov => mov.importe < 0)
+    .reduce((acumulador, mov) => acumulador + mov.importe, 0);
+}
+
+
+// Agrupa los gastos por categoría en un objeto.
+
+function gastoPorCategoria() {
+  return movimientos
+    .filter(mov => mov.importe < 0)
+    .reduce((acumulador, mov) => {
+      const cat = mov.categoria;
+      if (!acumulador[cat]) {
+        acumulador[cat] = 0;
+      }
+      acumulador[cat] += mov.importe;
+      return acumulador;
+    }, {});
+}
+
+
+// Identifica cuál es la categoría con mayor importe en gastos acumulados.
+
+function categoriaMasGasto() {
+  const gastosCat = gastoPorCategoria();
+  let maxGasto = 0;
+  let catMax = "Ninguna";
+
+  for (const cat in gastosCat) {
+    const gastoAbsoluto = Math.abs(gastosCat[cat]);
+    if (gastoAbsoluto > maxGasto) {
+      maxGasto = gastoAbsoluto;
+      catMax = cat;
+    }
+  }
+
+  return catMax === "Ninguna" ? "-" : `${catMax} (${formatearDinero(-maxGasto)})`;
+}
+// Carga inicial al abrir la página
+document.addEventListener("DOMContentLoaded", () => {
+  // Rellenamos los datos del resumen
+  document.getElementById("titular-display").textContent = titular;
+  document.getElementById("saldo-actual-display").textContent = formatearDinero(saldoActual());
+  
+  //estas dos líneas insertan los valores de reduce
+  document.getElementById("gastos-reduce-display").textContent = formatearDinero(totalGastosReduce());
+  document.getElementById("top-categoria-display").textContent = categoriaMasGasto();
+
+  // Pintamos la tabla
+  pintarTabla(movimientos);
+});
