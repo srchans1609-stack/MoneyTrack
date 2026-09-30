@@ -68,5 +68,45 @@ let movimientos = [
 ];
 
 // Comprobación por consola (F12)
+console.log("--- NIVEL 02 ---");
 console.log("Lista de movimientos cargada:", movimientos);
 console.log("Total de movimientos:", movimientos.length);
+
+
+// 1. Recorre el array 'movimientos' con un bucle y suma solo los importes positivos (> 0).
+
+function totalIngresos() {
+  let suma = 0;
+  for (let i = 0; i < movimientos.length; i++) {
+    if (movimientos[i].importe > 0) {
+      suma += movimientos[i].importe;
+    }
+  }
+  return suma;
+}
+
+
+ //2. Recorre el array 'movimientos' y suma solo los importes negativos (< 0).
+ 
+function totalGastos() {
+  let suma = 0;
+  for (let i = 0; i < movimientos.length; i++) {
+    if (movimientos[i].importe < 0) {
+      suma += movimientos[i].importe;
+    }
+  }
+  return suma;
+}
+
+
+ // 3. Devuelve el saldo actual sumando el saldo inicial, los ingresos y los gastos.
+
+function saldoActual() {
+  return saldoInicial + totalIngresos() + totalGastos();
+}
+
+// 4. Muestra de resultados en la consola con la función formatearDinero
+console.log("--- NIVEL 03 ---");
+console.log("Total Ingresos:", formatearDinero(totalIngresos()));
+console.log("Total Gastos:", formatearDinero(totalGastos()));
+console.log("Saldo Actual:", formatearDinero(saldoActual()));
