@@ -1,5 +1,5 @@
 const titular = "Ander Chans";       // Nombre del titular
-let saldoInicial = 1000.00;          // Saldo inicial
+let saldoInicial = 3.50;          // Saldo inicial
 const simboloMoneda = "€";
 
 
@@ -110,3 +110,55 @@ console.log("--- NIVEL 03 ---");
 console.log("Total Ingresos:", formatearDinero(totalIngresos()));
 console.log("Total Gastos:", formatearDinero(totalGastos()));
 console.log("Saldo Actual:", formatearDinero(saldoActual()));
+
+
+ // listaMovimientos Lista de objetos a pintar
+
+function pintarTabla(listaMovimientos) {
+  const tbody = document.getElementById("tabla-movimientos");
+  tbody.innerHTML = ""; // Limpiamos la tabla antes de volver a pintar
+
+  listaMovimientos.forEach(mov => {
+    const tr = document.createElement("tr");
+
+    // Decidimos la clase CSS según el tipo de importe
+    const claseImporte = mov.importe >= 0 ? "ingreso" : "gasto";
+
+    tr.innerHTML = `
+      <td>${mov.id}</td>
+      <td>${mov.concepto}</td>
+      <td>${mov.categoria}</td>
+      <td>${mov.fecha}</td>
+      <td class="${claseImporte}">${formatearDinero(mov.importe)}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+// Escuchador de eventos para el desplegable de filtro por categoría (.filter)
+const selectFiltro = document.getElementById("filtro-categoria");
+
+selectFiltro.addEventListener("change", (e) => {
+  const categoriaSeleccionada = e.target.value;
+
+  if (categoriaSeleccionada === "Todas") {
+    pintarTabla(movimientos);
+  } else {
+    // Usamos el método filter para quedarnos solo con la categoría seleccionada
+    const movimientosFiltrados = movimientos.filter(
+      mov => mov.categoria === categoriaSeleccionada
+    );
+    pintarTabla(movimientosFiltrados);
+  }
+});
+
+// Carga inicial al abrir la página
+document.addEventListener("DOMContentLoaded", () => {
+  // Rellenamos el resumen inicial
+  document.getElementById("titular-display").textContent = titular;
+  document.getElementById("saldo-actual-display").textContent = formatearDinero(saldoActual());
+
+  // Pintamos la tabla completa al cargar
+  pintarTabla(movimientos);
+});

@@ -3,12 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MoneyTrack - Nivel 1</title>
+  <title>MoneyTrack - Nivel 4</title>
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-  <h1>MoneyTrack</h1>
-  <p>Abre la consola del navegador (F12).</p>
+  <div class="container">
+    <h1>MoneyTrack </h1>
+
+    <!-- Resumen básico -->
+    <div class="resumen">
+      <p><strong>Titular:</strong> <span id="titular-display"></span></p>
+      <p><strong>Saldo Actual:</strong> <span id="saldo-actual-display"></span></p>
+    </div>
+
+    <!-- Filtro por categoría -->
+    <section class="seccion-tabla">
+      <h2>Listado de Movimientos</h2>
+      
+      <div class="filtro">
+        <label for="filtro-categoria">Filtrar por categoría: </label>
+        <select id="filtro-categoria">
+          <option value="Todas">Todas</option>
+          <option value="Trabajo">Trabajo</option>
+          <option value="Comida">Comida</option>
+          <option value="Ocio">Ocio</option>
+          <option value="Servicios">Servicios</option>
+          <option value="Otros">Otros</option>
+        </select>
+      </div>
+
+      <!-- Tabla vacía que rellenaremos con JavaScript -->
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Concepto</th>
+            <th>Categoría</th>
+            <th>Fecha</th>
+            <th>Importe</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-movimientos">
+          <!-- Las filas se insertarán desde app.js -->
+        </tbody>
+      </table>
+    </section>
+  </div>
 
   <script src="app.js"></script>
 </body>
