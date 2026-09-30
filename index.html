@@ -3,22 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MoneyTrack</title>
+  <title>MoneyTrack - App Completa</title>
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
   <div class="container">
     <h1>MoneyTrack</h1>
 
-    <!-- Resumen con indicadores y estadísticas -->
+    <!-- Resumen general -->
     <div class="resumen">
       <p><strong>Titular:</strong> <span id="titular-display"></span></p>
+      <p><strong>Saldo Inicial:</strong> <span id="saldo-inicial-display"></span></p>
+      <p><strong>Ingresos Totales:</strong> <span id="ingresos-display" class="ingreso"></span></p>
+      <p><strong>Gastos Totales:</strong> <span id="gastos-reduce-display" class="gasto"></span></p>
       <p><strong>Saldo Actual:</strong> <span id="saldo-actual-display"></span></p>
-      <p><strong>Total Gastado:</strong> <span id="gastos-reduce-display" class="gasto"></span></p>
       <p><strong>Categoría con más gasto:</strong> <span id="top-categoria-display">-</span></p>
     </div>
 
-    <!-- Filtro por categoría -->
+    <!-- Formulario para añadir nuevo movimiento -->
+    <section class="seccion-form">
+      <h2>Añadir Nuevo Movimiento</h2>
+      <form id="form-movimiento">
+        <input type="text" id="concepto" placeholder="Concepto (ej. Nómina, Cena)" required>
+        <input type="number" step="0.01" id="importe" placeholder="Importe (+ ingreso / - gasto)" required>
+        <select id="categoria" required>
+          <option value="">Selecciona categoría</option>
+          <option value="Trabajo">Trabajo</option>
+          <option value="Comida">Comida</option>
+          <option value="Ocio">Ocio</option>
+          <option value="Servicios">Servicios</option>
+          <option value="Otros">Otros</option>
+        </select>
+        <button type="submit">Añadir</button>
+      </form>
+    </section>
+
+    <!-- Tabla y filtro -->
     <section class="seccion-tabla">
       <h2>Listado de Movimientos</h2>
       
@@ -42,10 +62,10 @@
             <th>Categoría</th>
             <th>Fecha</th>
             <th>Importe</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tabla-movimientos">
-          <!-- Las filas se insertan desde app.js -->
         </tbody>
       </table>
     </section>

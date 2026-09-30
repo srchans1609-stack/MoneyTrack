@@ -3,7 +3,7 @@ let saldoInicial = 3.50;          // Saldo inicial
 const simboloMoneda = "€";
 
 
-// 2. Función para formatear cantidades a formato de moneda local
+//  Función para formatear cantidades a formato de moneda local
 /**
  * Recibe un número y devuelve una cadena formateada con 2 decimales y el símbolo de moneda.
  * Ejemplo: 85.5 -> "85,50 €"
@@ -73,7 +73,7 @@ console.log("Lista de movimientos cargada:", movimientos);
 console.log("Total de movimientos:", movimientos.length);
 
 
-// 1. Recorre el array 'movimientos' con un bucle y suma solo los importes positivos (> 0).
+//  Recorre el array 'movimientos' con un bucle y suma solo los importes positivos (> 0).
 
 function totalIngresos() {
   let suma = 0;
@@ -86,7 +86,7 @@ function totalIngresos() {
 }
 
 
- //2. Recorre el array 'movimientos' y suma solo los importes negativos (< 0).
+ // Recorre el array 'movimientos' y suma solo los importes negativos (< 0).
  
 function totalGastos() {
   let suma = 0;
@@ -99,13 +99,13 @@ function totalGastos() {
 }
 
 
- // 3. Devuelve el saldo actual sumando el saldo inicial, los ingresos y los gastos.
+ // Devuelve el saldo actual sumando el saldo inicial, los ingresos y los gastos.
 
 function saldoActual() {
   return saldoInicial + totalIngresos() + totalGastos();
 }
 
-// 4. Muestra de resultados en la consola con la función formatearDinero
+//  Muestra de resultados en la consola con la función formatearDinero
 console.log("--- NIVEL 03 ---");
 console.log("Total Ingresos:", formatearDinero(totalIngresos()));
 console.log("Total Gastos:", formatearDinero(totalGastos()));
@@ -116,64 +116,39 @@ console.log("Saldo Actual:", formatearDinero(saldoActual()));
 
 function pintarTabla(listaMovimientos) {
   const tbody = document.getElementById("tabla-movimientos");
-  tbody.innerHTML = ""; // Limpiamos la tabla antes de volver a pintar
+  tbody.innerHTML = "";
 
   listaMovimientos.forEach(mov => {
     const tr = document.createElement("tr");
-
-    // Decidimos la clase CSS según el tipo de importe
     const claseImporte = mov.importe >= 0 ? "ingreso" : "gasto";
 
+    // Incluimos un botón de borrar que llama a la función borrarMovimiento con el id correspondiente
     tr.innerHTML = `
       <td>${mov.id}</td>
       <td>${mov.concepto}</td>
       <td>${mov.categoria}</td>
       <td>${mov.fecha}</td>
       <td class="${claseImporte}">${formatearDinero(mov.importe)}</td>
+      <td><button class="btn-borrar" onclick="borrarMovimiento(${mov.id})">Borrar</button></td>
     `;
 
     tbody.appendChild(tr);
   });
 }
 
-// Escuchador de eventos para el desplegable de filtro por categoría (.filter)
-const selectFiltro = document.getElementById("filtro-categoria");
-
-selectFiltro.addEventListener("change", (e) => {
-  const categoriaSeleccionada = e.target.value;
-
-  if (categoriaSeleccionada === "Todas") {
-    pintarTabla(movimientos);
-  } else {
-    // Usamos el método filter para quedarnos solo con la categoría seleccionada
-    const movimientosFiltrados = movimientos.filter(
-      mov => mov.categoria === categoriaSeleccionada
-    );
-    pintarTabla(movimientosFiltrados);
-  }
+// Evento para el filtro desplegable
+document.getElementById("filtro-categoria").addEventListener("change", () => {
+  refrescar();
 });
 
-// Carga inicial al abrir la página
-document.addEventListener("DOMContentLoaded", () => {
-  // Rellenamos el resumen inicial
-  document.getElementById("titular-display").textContent = titular;
-  document.getElementById("saldo-actual-display").textContent = formatearDinero(saldoActual());
-
-  // Pintamos la tabla completa al cargar
-  pintarTabla(movimientos);
-});
-
- // Calcula el total gastado utilizando el método .reduce().
+// Calcula el total gastado utilizando el método .reduce().
 
 function totalGastosReduce() {
   return movimientos
     .filter(mov => mov.importe < 0)
     .reduce((acumulador, mov) => acumulador + mov.importe, 0);
 }
-
-
 // Agrupa los gastos por categoría en un objeto.
-
 function gastoPorCategoria() {
   return movimientos
     .filter(mov => mov.importe < 0)
@@ -186,10 +161,7 @@ function gastoPorCategoria() {
       return acumulador;
     }, {});
 }
-
-
-// Identifica cuál es la categoría con mayor importe en gastos acumulados.
-
+// 3. Identifica cuál es la categoría con mayor importe en gastos acumulados.
 function categoriaMasGasto() {
   const gastosCat = gastoPorCategoria();
   let maxGasto = 0;
@@ -205,16 +177,64 @@ function categoriaMasGasto() {
 
   return catMax === "Ninguna" ? "-" : `${catMax} (${formatearDinero(-maxGasto)})`;
 }
-// Carga inicial al abrir la página
-document.addEventListener("DOMContentLoaded", () => {
-  // Rellenamos los datos del resumen
+
+
+// Función central que vuelve a calcular todos los indicadores y actualiza la tabla.
+
+function refrescar() {
+  // Actualizar indicadores del DOM
   document.getElementById("titular-display").textContent = titular;
-  document.getElementById("saldo-actual-display").textContent = formatearDinero(saldoActual());
-  
-  //estas dos líneas insertan los valores de reduce
+  document.getElementById("saldo-inicial-display").textContent = formatearDinero(saldoInicial);
+  document.getElementById("ingresos-display").textContent = formatearDinero(totalIngresos());
   document.getElementById("gastos-reduce-display").textContent = formatearDinero(totalGastosReduce());
+  document.getElementById("saldo-actual-display").textContent = formatearDinero(saldoActual());
   document.getElementById("top-categoria-display").textContent = categoriaMasGasto();
 
-  // Pintamos la tabla
-  pintarTabla(movimientos);
+  // Filtrar según la opción activa del select
+  const categoriaSeleccionada = document.getElementById("filtro-categoria").value;
+  if (categoriaSeleccionada === "Todas") {
+    pintarTabla(movimientos);
+  } else {
+    pintarTabla(movimientos.filter(m => m.categoria === categoriaSeleccionada));
+  }
+}
+
+ //Elimina un movimiento por su ID utilizando .filter() y refresca la interfaz.
+
+function borrarMovimiento(id) {
+  movimientos = movimientos.filter(mov => mov.id !== id);
+  refrescar();
+}
+
+// Escuchador del formulario para añadir nuevos movimientos
+document.getElementById("form-movimiento").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const conceptoInput = document.getElementById("concepto").value.trim();
+  const importeInput = parseFloat(document.getElementById("importe").value);
+  const categoriaInput = document.getElementById("categoria").value;
+
+  // Validación básica
+  if (!conceptoInput || isNaN(importeInput) || !categoriaInput) {
+    alert("Por favor, rellena todos los campos correctamente.");
+    return;
+  }
+
+  // Creación del nuevo objeto
+  const nuevoMovimiento = {
+    id: movimientos.length > 0 ? Math.max(...movimientos.map(m => m.id)) + 1 : 1,
+    concepto: conceptoInput,
+    importe: importeInput,
+    categoria: categoriaInput,
+    fecha: new Date().toISOString().split("T")[0]
+  };
+
+  movimientos.push(nuevoMovimiento);
+  
+  // Limpiar campos del formulario y refrescar la app
+  e.target.reset();
+  refrescar();
 });
+
+// Carga inicial
+document.addEventListener("DOMContentLoaded", refrescar);
